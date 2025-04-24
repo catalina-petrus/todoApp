@@ -1,0 +1,131 @@
+{
+  "todos": [
+    {
+      "id": "2",
+      "title": "task 2",
+      "description": "description",
+      "completed": true,
+      "projectId": 1,
+      "tagIds": [
+        1,
+        3
+      ],
+      "priority": "low",
+      "dueDate": "2025-04-26T12:00:00.000Z",
+      "createdAt": "2025-04-24T12:00:10.460Z"
+    },
+    {
+      "id": "3",
+      "title": "task 3",
+      "description": "here is a third task",
+      "completed": false,
+      "projectId": 1,
+      "tagIds": [
+        1,
+        2
+      ],
+      "priority": "medium",
+      "dueDate": "2025-04-24T12:12:46.553Z",
+      "createdAt": "2025-04-24T12:12:46.553Z"
+    },
+    {
+      "id": "4",
+      "title": "test task",
+      "description": "this is a test task",
+      "completed": false,
+      "projectId": 1,
+      "tagIds": [
+        1,
+        2
+      ],
+      "priority": "high",
+      "dueDate": "2025-04-26T13:30:00.000Z",
+      "createdAt": "2025-04-24T13:30:45.559Z"
+    },
+    {
+      "id": "5",
+      "title": "todo",
+      "description": "here sis a todo",
+      "completed": false,
+      "projectId": 1,
+      "tagIds": [
+        1,
+        2
+      ],
+      "priority": "medium",
+      "dueDate": "2025-04-24T13:36:24.023Z",
+      "createdAt": "2025-04-24T13:36:24.023Z"
+    },
+    {
+      "id": "1a14",
+      "title": "title",
+      "description": "descr",
+      "completed": false,
+      "projectId": "2",
+      "tagIds": [
+        1,
+        2
+      ],
+      "priority": "low",
+      "dueDate": "2025-04-24T14:52:15.475Z",
+      "createdAt": "2025-04-24T14:52:15.475Z"
+    }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Project A",
+      "description": "This is the first project description",
+      "color": "#42b883",
+      "createdAt": "2025-04-20T12:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "name": "Project B",
+      "description": "This is the second project description",
+      "color": "#42b883",
+      "createdAt": "2025-04-20T12:00:00.000Z"
+    },
+    {
+      "id": "3",
+      "name": "Project C",
+      "description": "This is the third project description",
+      "color": "#42b883",
+      "createdAt": "2025-04-20T12:00:00.000Z"
+    },
+    {
+      "id": "4",
+      "name": "Home Tasks",
+      "description": "these are to be done at home",
+      "createdAt": "2025-04-24T13:17:21.135Z",
+      "updatedAt": "2025-04-24T13:17:21.135Z"
+    },
+    {
+      "id": "ace0",
+      "name": "list test",
+      "description": "lalal",
+      "createdAt": "2025-04-24T14:31:31.554Z",
+      "updatedAt": "2025-04-24T14:31:31.554Z"
+    }
+  ],
+  "tags": [
+    {
+      "id": "1",
+      "name": "tag1",
+      "color": "#ff5252"
+    },
+    {
+      "id": "2",
+      "name": "tag2",
+      "color": "#42a5f5"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Catalina",
+      "email": "petruscatalina@yahoo.com",
+      "avatarUrl": "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+    }
+  ]
+}
