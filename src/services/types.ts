@@ -5,8 +5,8 @@ export interface Todo {
     createdAt: Date;
     projectId: number;
     tagIds: number[];
-    priority: string;
-    dueDate: Date;
+    priority: string | null;
+    dueDate: Date | null;
     completed: boolean;
   }
 

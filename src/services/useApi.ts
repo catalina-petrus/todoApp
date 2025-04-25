@@ -46,6 +46,11 @@ export const useApi = () => {
       const response = await http.post<Project>('/projects', project)
       return response.data
     }
+    //added after feedback session : get lists of todos by project id
+    const getTodosByProjectId = async (projectId: number | string): Promise<Todo[]> => {
+      const response = await http.get<Todo[]>(`/todos?projectId=${projectId}`)
+      return response.data
+    }
       
     return {
       getTodos,
@@ -55,6 +60,7 @@ export const useApi = () => {
       getTodo,
       updateTodo,
       getProjectData,
-      createProject
+      createProject,
+      getTodosByProjectId
     }
 }

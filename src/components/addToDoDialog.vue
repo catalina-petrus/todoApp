@@ -13,10 +13,10 @@ const error = ref(null)
 
 const title = ref('')
 const description = ref('')
-const priority = ref('low')
+const priority = ref('')
 const dueDate = ref('')
 const tags = ref([])
-const project = ref("Project A")
+const project = ref("")
 const showDatePicker = ref(false)
 const showPriorityDropdown = ref(false)
 
@@ -24,6 +24,7 @@ const showPriorityDropdown = ref(false)
 
 const newTodo = ref('')
 const formError = ref('')
+
 const addTodo = async () => {
   formError.value = ''
 
@@ -34,30 +35,31 @@ const addTodo = async () => {
 
   try {
     const todo: Omit<Todo, 'id'> = {
-  title: title.value,
-  description: description.value,
-  completed: false,
-  projectId: store.selectedProjectId || 1,
-  tagIds: [1, 2],
-  priority: priority.value,
-  dueDate: new Date(dueDate.value || new Date()),
-  createdAt: new Date(),
-}
+      title: title.value,
+      description: description.value,
+      completed: false,
+      projectId: store.selectedProjectId || 1,
+      tagIds: [1, 2],
+      priority: priority.value ? priority.value : null, // change :only set if user selected
+      dueDate: dueDate.value ? new Date(dueDate.value) : null, // change : only set if user selected
+      createdAt: new Date(),
+    }
 
     const addedTodo = await api.createTodo(todo)
-    store.setTodos([...store.todos, addedTodo]) 
+    store.setTodos([...store.todos, addedTodo])
 
-    // Reset form
+    // reset form
     title.value = ''
     description.value = ''
     dueDate.value = ''
-    priority.value = 'low'
+    priority.value = '' // reset also
     tags.value = []
-    formError.value = ''
+
   } catch (err: any) {
-    error.value = err.message || 'Failed to add todo'
+    formError.value = err.message || 'Failed to add todo'
   }
 }
+
 
 
 

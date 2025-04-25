@@ -12,7 +12,7 @@ export const useTodoStore = defineStore('todo', () => {
   const selectedProjectId = ref<number | null>(null)
 
   const fetchTodos = async () => {
-    const fetched = await api.getTodos()
+    const fetched = await api.getTodosByProjectId(selectedProjectId.value || 0)
     setTodos(fetched)
   }
 

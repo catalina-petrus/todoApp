@@ -11,31 +11,9 @@ const store = useTodoStore()
 console.log("here" ,store.selectedProjectId)
 
 const api = useApi()
-const project = ref<Project | undefined>(undefined)
 const props = defineProps<{ todoId: number }>()
 const emit = defineEmits(['close'])
 const todo = ref<Todo | null>(null)
-
-const fetchProjectData = async (id: number) => {
-  try {
-    const response = await api.getProjects()
-    project.value = response.find(p => p.id === id)
-
-  } catch (err: any) {
-    console.error(err)
-  }
-}
-
-onMounted(() => {
-  api.getProjects()
-    .then(response => {
-      project.value = response.find(p => p.id === 2)
-    })
-    .catch(err => {
-      console.error(err)
-    })
-    fetchProjectData(2)
-})
 
 const showPriorityDropdown = ref(false)
 const priority = ref('')
@@ -55,7 +33,7 @@ const savePriority = async () => {
 watch(
   () => todo.value,
   (newTodo) => {
-    if (newTodo) priority.value = newTodo.priority
+    if (newTodo) priority.value = newTodo.priority || ''
   },
   { immediate: true }
 )
@@ -82,11 +60,15 @@ const saveDueDate = async () => {
 watch(
   () => todo.value,
   (newTodo) => {
-    if (newTodo) dueDate.value = new Date(newTodo.dueDate).toISOString().slice(0, 16)
+    if (newTodo) dueDate.value = new Date(newTodo.dueDate || new Date()).toISOString().slice(0, 16)
   },
   { immediate: true }
 )
-
+watch(todo, (newTodo) => {
+  if (newTodo?.projectId) {
+    store.fetchProjectData(newTodo.projectId)
+  }
+})
 
 const fetchTodo = async () => {
   const todos = await api.getTodos()
@@ -96,6 +78,28 @@ const fetchTodo = async () => {
 
 watch(() => props.todoId, fetchTodo, { immediate: true })
 
+/// editable todo title and description
+const editableTodo = ref<Todo | null>(null)
+
+
+watch(todo, (val) => {
+  editableTodo.value = val ? { ...val } : null
+}, { immediate: true })
+
+const saveError = ref('')
+const saveSuccess = ref(false)
+
+const saveTodoChanges = async () => {
+  if (!editableTodo.value) return
+  try {
+    await api.updateTodo(editableTodo.value.id, editableTodo.value)
+    saveSuccess.value = true
+   
+  } catch (err: any) {
+    console.error(err)
+    saveError.value = 'Failed to save changes.'
+  }
+}
 
 
 
@@ -106,8 +110,8 @@ watch(() => props.todoId, fetchTodo, { immediate: true })
 <div class="flex items-center gap-2 text-gray-700">
   <BriefcaseBusinessIcon class="w-5 h-5" />
   <div class="flex flex-col">
-    <p class="text-sm font-medium">{{ project?.name || 'Project Name' }}</p>
-    <p class="text-sm text-gray-500">{{ project?.description || 'Description of Project' }}</p>
+    <p class="text-sm font-medium">{{ store.project?.name || 'Project Name' }}</p>
+    <p class="text-sm text-gray-500">{{ store.project?.description || 'Description of Project' }}</p>
   </div>
 </div>
 
@@ -115,9 +119,34 @@ watch(() => props.todoId, fetchTodo, { immediate: true })
   <!-- Only shows the card if todo is loaded -->
   <div v-if="todo" class="bg-white shadow-md rounded-lg p-6 flex flex-col gap-6">
     <div class="mb-4">
-      <p><b>{{ todo.title }}</b></p>
-      <span><TextIcon class="w-5 h-5 text-green-600" /></span><p>{{ todo.description }}</p>
-    </div>
+      <!-- Editable Title -->
+      <input
+      v-if="editableTodo"
+      v-model="editableTodo.title"
+      placeholder="Enter title"
+      class="w-full text-lg font-semibold border border-gray-200 px-3 py-1 rounded mb-2 focus:outline-none focus:ring"
+    />
+
+    <textarea
+      v-if="editableTodo"
+      v-model="editableTodo.description"
+      placeholder="Enter description"
+      class="w-full text-sm border border-gray-200 px-3 py-2 rounded focus:outline-none focus:ring"
+      rows="3"
+    ></textarea>
+
+  
+  <div class="flex justify-end mt-4 gap-2">
+  <button
+    @click="saveTodoChanges"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+  >
+    Save Changes
+  </button>
+</div>
+
+</div>
+
 
     <!-- Due Date -->
     <div>
@@ -127,7 +156,7 @@ watch(() => props.todoId, fetchTodo, { immediate: true })
       <p class="text-gray-500 font-medium">Due date:</p>
       <p>
         {{
-          new Date(todo.dueDate).toLocaleDateString('en-GB', {
+          new Date(todo.dueDate || new Date()).toLocaleDateString('en-GB', {
             day: '2-digit',
             month: 'short',
             year: 'numeric'

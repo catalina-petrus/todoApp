@@ -126,7 +126,10 @@ const searchedTodos = computed(() =>
           </div>
 
           <div class="flex items-center gap-4">
-            <span class="text-sm text-gray-500">{{ new Date(todo?.dueDate).toLocaleDateString('en-GB') }}</span>
+            <span class="text-sm text-gray-500">
+  {{ todo?.dueDate ? new Date(todo.dueDate).toLocaleDateString('en-GB') : 'No due date' }}
+</span>
+
             <span
                 :class="[
                     'text-xs px-2 py-1 rounded-full font-medium capitalize',
@@ -134,10 +137,12 @@ const searchedTodos = computed(() =>
                     ? 'bg-red-100 text-red-700'
                     : todo.priority === 'medium'
                     ? 'bg-yellow-100 text-yellow-700'
-                    : 'bg-green-100 text-green-700'
+                    : todo.priority === 'low'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-700'
                 ]"
                 >
-                {{ todo.priority }}
+                {{ todo.priority ? todo.priority : 'No priority' }}
                 </span>
             <Edit2Icon class="w-5 h-5 text-gray-300 cursor-pointer hover:text-gray-700" @click="handleTodoClick(todo.id)" />
             <Trash2

@@ -42,6 +42,10 @@ const createProject = async () => {
     projectError.value = 'Failed to create project.'
   }
 }
+const handleProjectClick = (id: number) => {
+  store.selectProject(id)
+  store.fetchTodos()
+}
 
 
 onMounted(async () => {
@@ -66,7 +70,7 @@ onMounted(async () => {
       <button
         v-for="project in projects"
         :key="project.id"
-        @click="store.selectProject(project.id)"
+        @click="() => { store.selectProject(project.id); store.fetchTodos() }"
         class="text-left hover:bg-gray-100 px-3 py-2 rounded text-sm"
         :class="{ 'bg-yellow-100 text-yellow-700 font-semibold': store.selectedProjectId === project.id }"
       >
